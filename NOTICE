@@ -1,0 +1,14 @@
+Copyright 2022 and later Mark Struberg
+
+
+
+This product includes the following software
+
+main software:
+developed by Mark Struberg under Apache Software License v 2.0
+
+
+protothreads: 
+developed by Adam Dunkels, Swedish Institute of Computer Science
+under a BSD-style license as noted in lc.h, lc-switch.h, pt.h
+More information at http://dunkels.com/adam/pt/
