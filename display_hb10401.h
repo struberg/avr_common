@@ -1,5 +1,5 @@
-#ifndef DISPLAY_HB10401_H
-#define DISPLAY_HB10401_H
+#ifndef __DISPLAY_HB10401_H__
+    #define __DISPLAY_HB10401_H__
 
 /**
  * @file display_hb10401.h

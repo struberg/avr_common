@@ -1,5 +1,5 @@
-#ifndef __STRUB_COMMON__
-    #define __STRUB_COMMON__
+#ifndef __STRUB_COMMON_H__
+    #define __STRUB_COMMON_H__
 
 
 #include <avr/io.h>
