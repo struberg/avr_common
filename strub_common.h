@@ -5,8 +5,13 @@
 #include <avr/io.h>
 
 // we run at 10 MHz, so counting to5k gives us 0.5 ms or 2000 task ticks per second.
-#define TASK_TIMER_OVERFLOW 5000
-#define TASK_TIMER TCB0
+#ifndef TASK_TIMER_OVERFLOW
+  #define TASK_TIMER_OVERFLOW 5000
+#endif
+
+#ifndef TASK_TIMER
+  #define TASK_TIMER TCB0
+#endif
 
 #define set_bit(register, bit)  register |= (1 << bit)
 #define clear_bit(register, bit)  register &= ~(1 << bit)
