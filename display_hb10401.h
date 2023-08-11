@@ -88,12 +88,15 @@ void lcd_clear(void);
 /**
  * @brief write a text into the video buffer
  * 
- * @param pState 
  * @param row 0-based row
  * @param column 0-based column
  * @param pText zero terminated text to copy
  */
 void lcd_print(uint8_t row, uint8_t column, char* pText);
 
+/**
+ * @brief print a 32bit unsigned hex value to the screen
+ */
+void lcd_print32(uint8_t row, uint8_t column, uint32_t val);
 
 #endif

@@ -180,7 +180,6 @@ void lcd_clear(void) {
  * @brief write a text into the video buffer
  * Use lcd_repaint() to repaint the screen afterwards
  * 
- * @param pState 
  * @param row 0-based row
  * @param column 0-based column
  * @param pText zero terminated text to copy
@@ -193,6 +192,22 @@ void lcd_print(uint8_t row, uint8_t column, char* pText) {
         tsLcd.videoBuffer[bufPos++] = pText[i++];
     }
 }
+
+/**
+ * @brief print a 32bit unsigned hex value to the screen
+ * 
+ * @param row 
+ * @param column 
+ * @param val 
+ */
+void lcd_print32(uint8_t row, uint8_t column, uint32_t val) {
+    char chars[5]; 
+    toHexString_16((uint16_t)((val & 0xFFFF0000) >>16), chars);
+    lcd_print(row, column, chars);
+    toHexString_16((uint16_t)((val & 0x0000FFFF)), chars);
+    lcd_print(row, column+4, chars);
+}
+
 
 PT_THREAD(task_lcd(void)) 
 {
