@@ -4,8 +4,7 @@
 
 
 void i2c_setup(void) {
-
-	TWI0.MBAUD = (uint8_t)TWI0_BAUD(100000, 0); /* set MBAUD register */
+	TWI0.MBAUD = (uint8_t)TWI0_BAUD(400000, 0); /* set MBAUD register */
 
 	TWI0.MCTRLA = 1 << TWI_ENABLE_bp        /* Enable TWI Master: enabled */
 	              | 0 << TWI_QCEN_bp        /* Quick Command Enable: disabled */
