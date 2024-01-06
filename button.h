@@ -15,9 +15,10 @@ typedef struct Button_t {
  * This registers the given function pointer as callback which gets invoked
  * whenever a button press is encountered.
  * 
- * @param callback 
+ * @param callback which gets called when a button click is detected
+ * @param debounceTime for key debouncing
  */
-void setButtonCallback(void (*callback)(uint8_t));
+void setButtonCallback(void (*callback)(uint8_t), uint8_t debounceTime);
 
 /**
  * @brief Set the up buttons IO

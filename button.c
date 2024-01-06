@@ -32,11 +32,13 @@
  *       }
  * 
  */
-void (*cbButtonPressed)(uint8_t);
+void (*_cbButtonPressed)(uint8_t);
+uint8_t _debounceTime;
 
 
-void setButtonCallback(void (*callback)(uint8_t)) {
-    cbButtonPressed = callback;
+void setButtonCallback(void (*callback)(uint8_t), uint8_t debounceTime) {
+    _cbButtonPressed = callback;
+    _debounceTime = debounceTime;
 }
 
 
@@ -50,13 +52,13 @@ void buttonsCheck(uint8_t currentButtons) {
         lastButtons |= currentButtons;
     }
     else if (lastButtons != 0) {
-        if (btnClearedCounter < 0x2F) {
+        if (btnClearedCounter < _debounceTime) {
             // de-bouncing
             btnClearedCounter++;
         }
         else {
-            if (cbButtonPressed != NULL) {
-                (*cbButtonPressed)(lastButtons);
+            if (_cbButtonPressed != NULL) {
+                (*_cbButtonPressed)(lastButtons);
             }
             lastButtons = 0;
             btnClearedCounter = 0;
