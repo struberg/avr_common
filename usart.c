@@ -12,7 +12,7 @@ static uint8_t txPos = 0;
 
 
 /* Normal Mode, Baud register value */
-#define USART0_BAUD_RATE(BAUD_RATE) ((float)(10000000 * 64 / (16 * (float)BAUD_RATE)) + 0.5)
+#define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 
 int8_t usart_send(char* message, int maxLen) {

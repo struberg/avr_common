@@ -41,6 +41,14 @@ void toHexString_8(uint8_t value, char* buffer);
 void toHexString_16(uint16_t value, char* buffer);
 
 /**
+ * @brief Convert this to a hexadecimal string
+ * 
+ * @param value 
+ * @param buffer minimum 9 bytes
+ */
+void toHexString_32(uint32_t value, char* buffer);
+
+/**
  * @brief Convert this to a decimal string
  * 
  * @param value 
@@ -56,6 +64,13 @@ void toBcdString_8(uint8_t value, char* buffer);
  */
 void toBcdString_16(uint16_t value, char* buffer);
 
+/**
+ * @brief Convert this to a decimal string
+ * 
+ * @param value 
+ * @param buffer minimum 11 bytes
+ */
+void toBcdString_32(uint32_t value, char* buffer);
 
 #ifdef DEBUG_ENABLED 
   #define DEBUG ser_out((uint8_t) __LINE__ & 0x00ff)

@@ -14,17 +14,22 @@ inline char toBcd(uint8_t val) {
 }
 
 void toHexString_8(uint8_t value, char* buffer) {
-        buffer[0] = toBcd((value & 0xf0) >> 4);
-        buffer[1] = toBcd(value &  0x0f);
-        buffer[2] = 0;
+    buffer[0] = toBcd((value & 0xf0) >> 4);
+    buffer[1] = toBcd(value &  0x0f);
+    buffer[2] = 0;
 }
 
 void toHexString_16(uint16_t value, char* buffer) {
-        buffer[0] = toBcd((value & 0xf000) >> 12);
-        buffer[1] = toBcd((value & 0x0f00) >> 8);
-        buffer[2] = toBcd((value & 0x00f0) >> 4);
-        buffer[3] = toBcd(value &  0x000f);
-        buffer[4] = 0;
+    buffer[0] = toBcd((value & 0xf000) >> 12);
+    buffer[1] = toBcd((value & 0x0f00) >> 8);
+    buffer[2] = toBcd((value & 0x00f0) >> 4);
+    buffer[3] = toBcd(value &  0x000f);
+    buffer[4] = 0;
+}
+
+void toHexString_32(uint32_t value, char* buffer) {
+    toHexString_16((uint16_t)((value &0xFFFF0000) >> 16), buffer);
+    toHexString_16((uint16_t)(value &0x0000FFFF), buffer+4);
 }
 
 // e.g. CALC_DIGIT(uint8_t, 10)
@@ -85,7 +90,27 @@ void toBcdString_16(uint16_t value, char* buffer) {
     // ones
     buffer[4] = toBcd(rest);
     buffer[5] = 0;
+}
+
+void toBcdString_32(uint32_t value, char* buffer) {
+    uint16_t rest = value;
+    bool nr = false;
+
+    // 10k
+    CALC_DIGIT(uint32_t, 1000000000, 0)
+    CALC_DIGIT(uint32_t, 100000000, 1)
+    CALC_DIGIT(uint32_t, 10000000, 2)
+    CALC_DIGIT(uint32_t, 1000000, 3)
+    CALC_DIGIT(uint32_t, 100000, 4)
+    CALC_DIGIT(uint32_t, 10000, 5)
+    CALC_DIGIT(uint32_t, 1000 , 6)
+    CALC_DIGIT(uint32_t, 100  , 7)
+    CALC_DIGIT(uint32_t, 10   , 8)
+    // ones
+    buffer[9] = toBcd(rest);
+    buffer[10] = 0;
  }
+
 
 #define SER_PORT VPORTB
 #define SER_CLK  PIN4_bp
