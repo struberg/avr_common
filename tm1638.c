@@ -15,56 +15,53 @@
  */
 #include "tm1638.h"
 
-#define SET_LED PORTA.OUTSET = PIN7_bm;
-#define CLR_LED PORTA.OUTCLR = PIN7_bm;
-
 
 void tm1638_init(void) {
     // switch the pins to output mode
-    TM1638_PORT.DIRSET = TM1638_CLK_PIN | TM1638_STB_PIN | TM1638_DIO_PIN;
+    TM1638_PORT.DIRSET = (1<<TM1638_CLK_PIN) | (1<<TM1638_STB_PIN) | (1<<TM1638_DIO_PIN);
 
-    TM1638_PORT.OUTSET = TM1638_STB_PIN; //passive mode STB high
-    TM1638_PORT.OUTCLR = TM1638_CLK_PIN | TM1638_DIO_PIN; // clk starts with low and data 0
+    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN); //passive mode STB high
+    TM1638_PORT.OUTCLR = (1<<TM1638_CLK_PIN) | (1<<TM1638_DIO_PIN); // clk starts with low and data 0
 
     tm1638_sendCmd(TM1638_CMD_SET_BRIGHTNESS | 0xB);
     tm1638_sendCmd(TM1638_CMD_AUTO_INCREMENT);
 
     // clear all data registers
-    TM1638_PORT.OUTCLR = TM1638_STB_PIN;
+    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
     tm1638_sendDataByte(TM1638_CMD_SET_ADDRESS | 0x0);
     for (uint8_t i=0; i<16; i++) {
         tm1638_sendDataByte(0x80);
     }
-    TM1638_PORT.OUTSET = TM1638_STB_PIN;
+    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
 }
 
 void tm1638_sendDataByte(uint8_t data) {
     for (uint8_t i = 0; i<8; i++) {
-        TM1638_PORT.OUTCLR = TM1638_CLK_PIN;
+        TM1638_PORT.OUTCLR = (1<<TM1638_CLK_PIN);
         if (data & 0x01) {
-            TM1638_PORT.OUTSET = TM1638_DIO_PIN;
+            TM1638_PORT.OUTSET = (1<<TM1638_DIO_PIN);
         }
         else {
-            TM1638_PORT.OUTCLR = TM1638_DIO_PIN;
+            TM1638_PORT.OUTCLR = (1<<TM1638_DIO_PIN);
         }
-        TM1638_PORT.OUTSET = TM1638_CLK_PIN;
+        TM1638_PORT.OUTSET = (1<<TM1638_CLK_PIN);
         data = data >> 1;
     }
 }
 
 void tm1638_sendCmd(uint8_t cmd) {
-    TM1638_PORT.OUTCLR = TM1638_STB_PIN;
+    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
     tm1638_sendDataByte(cmd);
-    TM1638_PORT.OUTSET = TM1638_STB_PIN;
+    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
 }
 
 void tm1638_startDataFrame(uint8_t address) {
-    TM1638_PORT.OUTCLR = TM1638_STB_PIN;
+    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
     tm1638_sendDataByte(TM1638_CMD_SET_ADDRESS | (address & 0x0F) );
 }
 
 void tm1638_endDataFrame(void) {
-    TM1638_PORT.OUTSET = TM1638_STB_PIN;
+    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
 }
 
 /**

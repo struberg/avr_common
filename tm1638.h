@@ -50,14 +50,14 @@
 
 #ifndef TM1638_STB_PI
     // high -> passive, low -> chip select active
-    #define TM1638_STB_PIN PIN4_bm
+    #define TM1638_STB_PIN PIN4
 #endif
 #ifndef TM1638_CLK_PIN
     // data output is set with rising edge, data read is on falling edge
-    #define TM1638_CLK_PIN PIN5_bm
+    #define TM1638_CLK_PIN PIN5
 #endif
 #ifndef TM1638_DIO_PIN
-    #define TM1638_DIO_PIN PIN6_bm
+    #define TM1638_DIO_PIN PIN6
 #endif
 
 #define TM1638_CMD_READ_KEYS      0x42
