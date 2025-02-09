@@ -119,9 +119,8 @@ void max7219_endDataFrame(void);
  * The first byte is the first row of the topleft matrix.
  * 
  * @param pBuffer pointer to the display buffer
- * @param numberModules number of 8x8 MAX7219 display modules
  */
-void max7219_renderData(FrameBuffer* pBuffer, uint8_t numberModules);
+void max7219_renderData(FrameBuffer* pBuffer);
 
 
 #endif

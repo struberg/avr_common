@@ -39,6 +39,18 @@ void framebuffer_setPixel(FrameBuffer* pFrameBuffer, uint8_t xPos, uint8_t yPos,
     }
 }
 
+bool framebuffer_getPixel(FrameBuffer* pFrameBuffer, uint8_t xPos, uint8_t yPos) {
+    if (yPos > pFrameBuffer->heigth || xPos > pFrameBuffer->width) {
+        return false;
+    }
+
+    uint8_t bytePos = yPos * pFrameBuffer->widthBytes + xPos/8;
+    uint8_t bitPos = xPos % 8;
+
+    return pFrameBuffer->buffer[bytePos] & 0x80>>bitPos;
+}
+
+
 void framebuffer_hline(FrameBuffer* pFrameBuffer, int8_t xPosStart, int8_t yPos, int8_t xPosEnd, bool setClr) {
     if (yPos < 0 || yPos >= pFrameBuffer->heigth) {
         // not visible

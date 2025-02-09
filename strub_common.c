@@ -126,35 +126,32 @@ void toBcdString_32(uint32_t value, char* buffer) {
     buffer[10] = 0;
  }
 
+uint16_t nextRandom(void) {
+    static uint16_t seed = 23489;
+    seed = (seed * 3329) + 13249;
+    return seed;
+}
 
-#define SER_PORT VPORTB
-#define SER_CLK  PIN4_bp
-#define SER_DATA PIN5_bp
-
-
-
-void ser_out(uint8_t val) {
+void ser_out(volatile PORT_t* port, uint8_t clkPin, uint8_t dataPin, uint8_t val) {
     static bool ser_initialised = false;
 
     if (!ser_initialised) {
         
-        PORTB.OUTCLR = (1<<SER_CLK) | (1<<SER_DATA);
-        PORTB.DIRSET = (1<<SER_CLK) | (1<<SER_DATA);
+        port->OUTCLR = clkPin | dataPin;
+        port->DIRSET = clkPin | dataPin;
         ser_initialised = true;
     }
 
-
     for (int i= 0; i <8; i++) {
-        clear_bit(VPORTB_OUT, SER_CLK);
+        port->OUTCLR = clkPin;
         
         if (val & 0x01) {
-            set_bit(VPORTB_OUT, SER_DATA);
+            port->OUTSET = dataPin;
         }
         else {
-            clear_bit(VPORTB_OUT, SER_DATA);
+            port->OUTCLR = dataPin;
         }
-        set_bit(VPORTB_OUT, SER_CLK);
+        port->OUTSET = clkPin;
         val = val >>1;
     }
-    
 }

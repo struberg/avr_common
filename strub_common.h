@@ -87,19 +87,40 @@ void toBcdString_16(uint16_t value, char* buffer);
  */
 void toBcdString_32(uint32_t value, char* buffer);
 
+/**
+ * @brief get next short from the pseudo random generator 
+ * 
+ * @return uint16_t next random number
+ */
+uint16_t nextRandom(void);
+
+
 #ifdef DEBUG_ENABLED 
-  #define DEBUG ser_out((uint8_t) __LINE__ & 0x00ff)
+  #ifndef SER_PORT
+    #define SER_PORT PORTB
+  #endif
+  #ifndef SER_CLK
+    #define SER_CLK PIN1_bm
+  #endif
+  #ifndef SER_DATA
+    #define SER_DATA PIN0_bm
+  #endif
+
+  //X #define DEBUGLN ser_out((uint8_t) __LINE__ & 0x00ff);
+  #define SER_OUT(val) ser_out(&SER_PORT, SER_CLK, SER_DATA, val);
 
 #else
-  #define DEBUG
+  //X #define DEBUGLN
+  #define SER_OUT(dummy)
 #endif
+
 
 /**
  * @brief Output something to a 74HC164 shift register with 8 LEDs
  * 
  * @param val 
  */
-void ser_out(uint8_t val);
+void ser_out(volatile PORT_t* port, uint8_t clkPin, uint8_t dataPin, uint8_t val);
 
 
 #endif

@@ -57,8 +57,21 @@ typedef struct {
  * @param xPos 
  * @param yPos 
  * @param pTile 
+ * @param full if true we will also clear non-set pixels, if false we will only set pixels
  */
-void tile_place(FrameBuffer* pFrameBuffer, int8_t xPos, int8_t yPos, Tile* pTile);
+void tile_place(FrameBuffer* pFrameBuffer, int8_t xPos, int8_t yPos, Tile* pTile, bool full);
+
+/**
+ * @brief erase the tile from the frame buffer on the given location
+ * 
+ * That means any pixel of this location will be set to off;
+ * 
+ * @param pFrameBuffer frame buffer
+ * @param xPos 
+ * @param yPos 
+ * @param pTile 
+ */
+void tile_erase(FrameBuffer* pFrameBuffer, int8_t xPos, int8_t yPos, Tile* pTile);
 
 /**
  * @return uint8_t the width of the given tile
@@ -69,5 +82,14 @@ uint8_t tile_getWidth(Tile* pTile);
  * @return uint8_t the heigth of the given tile
  */
 uint8_t tile_getHeigth(Tile* pTile);
+
+/**
+ * @brief load a tile from the given address in the program memory
+ * 
+ * @param pTileProgMem 
+ * @param pTileTarget 
+ */
+void tile_loadFromProgMem(const Tile* pTileProgMem, Tile* pTileTarget);
+
 
 #endif

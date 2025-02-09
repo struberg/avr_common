@@ -86,10 +86,11 @@ void max7219_endDataFrame(void) {
 }
 
 
-void max7219_renderData(FrameBuffer* pFrameBuffer, uint8_t numberModules) {
+void max7219_renderData(FrameBuffer* pFrameBuffer) {
     // switch display off to avoid flickering effects
+    uint8_t modules = pFrameBuffer->bufferLen / 8;
     max7219_startDataFrame();
-    for (uint8_t i=0; i < numberModules; i++) {
+    for (uint8_t i=0; i < modules; i++) {
         max7219_sendData(MAX7219_CMD_DISPLAY, MAX7219_DISPLAY_MODE_OFF);
     }
     max7219_endDataFrame();
@@ -97,7 +98,7 @@ void max7219_renderData(FrameBuffer* pFrameBuffer, uint8_t numberModules) {
     uint8_t* pBufferPos = pFrameBuffer->buffer;
     for (uint8_t row = 0; row < 8; row++) {
         max7219_startDataFrame();
-        for (uint8_t module = 0; module < numberModules; module++) {
+        for (uint8_t module = 0; module < modules; module++) {
             max7219_sendData(MAX7219_CMD_DIGIT_0 + row, *pBufferPos++);
         }
         max7219_endDataFrame();
@@ -105,7 +106,7 @@ void max7219_renderData(FrameBuffer* pFrameBuffer, uint8_t numberModules) {
 
     // switch display on again
     max7219_startDataFrame();
-    for (uint8_t i=0; i < numberModules; i++) {
+    for (uint8_t i=0; i < modules; i++) {
         max7219_sendData(MAX7219_CMD_DISPLAY, MAX7219_DISPLAY_MODE_ON);
     }
     max7219_endDataFrame();

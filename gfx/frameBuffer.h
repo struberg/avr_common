@@ -52,6 +52,17 @@ void framebuffer_clear(FrameBuffer* pFrameBuffer);
 void framebuffer_setPixel(FrameBuffer* pFrameBuffer, uint8_t xPos, uint8_t yPos, bool setClr);
 
 /**
+ * @brief detect whether the pixel on the position is set or not
+ * 
+ * @param pFrameBuffer 
+ * @param xPos 
+ * @param yPos 
+ * @return true 
+ * @return false 
+ */
+bool framebuffer_getPixel(FrameBuffer* pFrameBuffer, uint8_t xPos, uint8_t yPos);
+
+/**
  * @brief draw a horizontal line
  * 
  * @param pFrameBuffer 
