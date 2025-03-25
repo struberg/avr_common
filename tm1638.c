@@ -16,52 +16,62 @@
 #include "tm1638.h"
 
 
-void tm1638_init(void) {
-    // switch the pins to output mode
-    TM1638_PORT.DIRSET = (1<<TM1638_CLK_PIN) | (1<<TM1638_STB_PIN) | (1<<TM1638_DIO_PIN);
+static volatile PORT_t* tm1638_port;
+static uint8_t tm1638_stbPin;
+static uint8_t tm1638_clkPin;
+static uint8_t tm1638_dioPin;
 
-    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN); //passive mode STB high
-    TM1638_PORT.OUTCLR = (1<<TM1638_CLK_PIN) | (1<<TM1638_DIO_PIN); // clk starts with low and data 0
+void tm1638_init(volatile PORT_t* port, uint8_t stbPin, uint8_t clkPin, uint8_t dioPin) {
+    tm1638_port = port;
+    tm1638_stbPin = stbPin;
+    tm1638_clkPin = clkPin;
+    tm1638_dioPin = dioPin;
+
+    // switch the pins to output mode
+    tm1638_port->DIRSET = (1<<tm1638_clkPin) | (1<<tm1638_stbPin) | (1<<tm1638_dioPin);
+
+    tm1638_port->OUTSET = (1<<tm1638_stbPin); //passive mode STB high
+    tm1638_port->OUTCLR = (1<<tm1638_clkPin) | (1<<tm1638_dioPin); // clk starts with low and data 0
 
     tm1638_sendCmd(TM1638_CMD_SET_BRIGHTNESS | 0xB);
     tm1638_sendCmd(TM1638_CMD_AUTO_INCREMENT);
 
     // clear all data registers
-    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTCLR = (1<<tm1638_stbPin);
     tm1638_sendDataByte(TM1638_CMD_SET_ADDRESS | 0x0);
     for (uint8_t i=0; i<16; i++) {
         tm1638_sendDataByte(0x80);
     }
-    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTSET = (1<<tm1638_stbPin);
 }
 
 void tm1638_sendDataByte(uint8_t data) {
     for (uint8_t i = 0; i<8; i++) {
-        TM1638_PORT.OUTCLR = (1<<TM1638_CLK_PIN);
+        tm1638_port->OUTCLR = (1<<tm1638_clkPin);
         if (data & 0x01) {
-            TM1638_PORT.OUTSET = (1<<TM1638_DIO_PIN);
+            tm1638_port->OUTSET = (1<<tm1638_dioPin);
         }
         else {
-            TM1638_PORT.OUTCLR = (1<<TM1638_DIO_PIN);
+            tm1638_port->OUTCLR = (1<<tm1638_dioPin);
         }
-        TM1638_PORT.OUTSET = (1<<TM1638_CLK_PIN);
+        tm1638_port->OUTSET = (1<<tm1638_clkPin);
         data = data >> 1;
     }
 }
 
 void tm1638_sendCmd(uint8_t cmd) {
-    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTCLR = (1<<tm1638_stbPin);
     tm1638_sendDataByte(cmd);
-    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTSET = (1<<tm1638_stbPin);
 }
 
 void tm1638_startDataFrame(uint8_t address) {
-    TM1638_PORT.OUTCLR = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTCLR = (1<<tm1638_stbPin);
     tm1638_sendDataByte(TM1638_CMD_SET_ADDRESS | (address & 0x0F) );
 }
 
 void tm1638_endDataFrame(void) {
-    TM1638_PORT.OUTSET = (1<<TM1638_STB_PIN);
+    tm1638_port->OUTSET = (1<<tm1638_stbPin);
 }
 
 /**

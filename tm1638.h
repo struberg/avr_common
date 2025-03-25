@@ -44,22 +44,6 @@
 #include <stdbool.h>
 
 
-#ifndef TM1638_PORT
-    #define TM1638_PORT PORTA
-#endif
-
-#ifndef TM1638_STB_PI
-    // high -> passive, low -> chip select active
-    #define TM1638_STB_PIN PIN4
-#endif
-#ifndef TM1638_CLK_PIN
-    // data output is set with rising edge, data read is on falling edge
-    #define TM1638_CLK_PIN PIN5
-#endif
-#ifndef TM1638_DIO_PIN
-    #define TM1638_DIO_PIN PIN6
-#endif
-
 #define TM1638_CMD_READ_KEYS      0x42
 #define TM1638_CMD_AUTO_INCREMENT 0x40
 #define TM1638_CMD_FIXED_ADDRESS  0x44
@@ -76,8 +60,12 @@
 /**
  * @brief initialise the tm1638 connection
  * This method has to be invoked before any other tm1638 function call.
+ * @param port 
+ * @param stbPin Chip Select ;high -> passive, low -> chip select active
+ * @param cliPin 
+ * @param dioPin 
  */
-void tm1638_init(void);
+void tm1638_init(volatile PORT_t* port, uint8_t stbPin, uint8_t clkPin, uint8_t dioPin);
 
 /**
  * @brief Send a command
